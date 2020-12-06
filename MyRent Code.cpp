@@ -45,7 +45,7 @@ void Renterchoose(int choose, string curr_id);
 void renterMENU(string curr_id);
 void EXIT();
 void EDIT_PERSONAL_DETAILS(string curr_id);
-string password_validation(string curr_id);
+string details_validation(string id,string password);
 
 int main()
 {
@@ -143,52 +143,30 @@ void LOG()
 	string password;
 	string line;
 	string curr_type, curr_password;
-	int i = 0;
 	ifstream DBusersf;//name decleartion
 	string word;
 	vector <string> words;
 	string curr_id;
-	while (1)
+	string validDetails;
+	while(1)
 	{
-		DBusersf.open("C:/USERSDATA/newC.txt"); // opening the file
 		cout << "Enter your id: ";
 		cin >> id;
 		cout << "Enter your password: ";
 		cin >> password;
-		while (DBusersf >> line)
+		validDetails=details_validation(id,password);
+		switch (validDetails)
 		{
-			istringstream iss(line);
-			if (line != "")
-			{
-				while (getline(iss, word, ','))
-				{
-					words.push_back(word);
-				}
-			}
-			curr_type = words[0];
-			curr_password = words[4];
-			curr_id = words[1];
-			if (id == curr_id && password == curr_password)
-			{
-				cout << "USER EXIST , YOU WILL DIRECTED TO RIGHT MENU " << endl;
-				if (curr_type == "Renter")
-				{
-					curr_id = id;
-					
-					DBusersf.close();
-					renterMENU(curr_id);
-				}
-				if (curr_type == "Landlord")
-				{
-					curr_id = id;
-					DBusersf.close();
-					landlordMENU(curr_id);
-				}
-			}
-			words.clear();
+			case "renter":
+				renterMENU(id);
+				break;
+			case "Landlord":
+				landlordMENU(id);
+				break;
+			default:
+				cout << "USER DOES NOT EXIST, TRY AGAIN" << endl;
 		}
-		cout << "USER DOES NOT EXIST, TRY AGAIN" << endl;
-		DBusersf.close();
+		
 	}
 }
 void EDIT_PERSONAL_DETAILS(string curr_id)
@@ -371,7 +349,7 @@ void EXIT()
 	cout << "goodbye" << endl;
 	exit(1);
 }
-string password_validation(string id, string password)
+string details_validation(string id, string password)
 {
 	string line;
 	ifstream DBusersf;//name decleartion
@@ -393,9 +371,11 @@ string password_validation(string id, string password)
 		curr_id = words[1];
 		if (id == curr_id && password == curr_password)
 		{
+			DBusersf.close();
 			return words[0];
 		}
 		words.clear();
 	}
+	DBusersf.close();
 	return "-1";
 }

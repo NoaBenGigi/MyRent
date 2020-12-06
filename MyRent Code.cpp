@@ -1,4 +1,4 @@
-﻿#define  _CRT_SECURE_NO_WARNINGS
+#define  _CRT_SECURE_NO_WARNINGS
 #define SIZE 30
 #define RED "\033[1;31m" 
 #define GREEN "\033[1;32m" 
@@ -39,14 +39,14 @@ struct renter
 void welcome();
 void REG();
 void LOG();
-void landlordMENU();
-void Landlordchoose(int choose);
-void Renterchoose(int choose);
-void renterMENU();
+void landlordMENU(string curr_id);
+void Landlordchoose(int choose, string curr_id);
+void Renterchoose(int choose, string curr_id);
+void renterMENU(string curr_id);
 void EXIT();
-void EDIT_PERSONAL_DETAILS();
-string curr_id;
-long curr_id1;
+void EDIT_PERSONAL_DETAILS(string curr_id);
+
+
 int main()
 {
 	welcome();
@@ -76,7 +76,7 @@ void REG()
 	int choose;
 	cout << GREEN << "please choose if you want to to Register as a : " << WHITE << endl << "1.LANDLORD" << endl << "2.RENTER" << endl;
 	cin >> choose;
-
+	string curr_id;
 	if (choose == 1)
 	{//REGISTER AS LANDLORD
 		landlord lUser;
@@ -95,6 +95,7 @@ void REG()
 		cin >> lUser.phoneNumber;
 		cout << "Enter your Address: " << endl;
 		cin >> lUser.address;
+		curr_id = lUser.id;
 
 		ofstream BDusersf;//name decleartion
 		BDusersf.open("C:/USERSDATA/newC.txt", ios::app); // opening the file
@@ -120,6 +121,7 @@ void REG()
 		cin >> rUser.lastName;
 		cout << "Enter your password: " << endl;
 		cin >> rUser.password;
+		curr_id = rUser.id;
 
 		ofstream BDusersf;//name decleartion
 		BDusersf.open("C:/USERSDATA/newC.txt", ios::app); // opening the file
@@ -131,29 +133,29 @@ void REG()
 		BDusersf.close();
 	}
 	if (choose == 1)
-		landlordMENU();
+		landlordMENU(curr_id);
 	if (choose == 2)
-		renterMENU();
+		renterMENU(curr_id);
 }
 void LOG()
 {
 	string id;
 	string password;
 	string line;
-	string curr_type, curr_password, curr_id;
+	string curr_type, curr_password;
 	int i = 0;
 	ifstream DBusersf;//name decleartion
 	string word;
 	vector <string> words;
-	
+	string curr_id;
 	while (1)
 	{
 		DBusersf.open("C:/USERSDATA/newC.txt"); // opening the file
 		cout << "Enter your id: ";
 		cin >> id;
-		cout << "Enter your password: " << endl;
+		cout << "Enter your password: ";
 		cin >> password;
-		while (DBusersf>> line)
+		while (DBusersf >> line)
 		{
 			istringstream iss(line);
 			if (line != "")
@@ -172,16 +174,15 @@ void LOG()
 				if (curr_type == "Renter")
 				{
 					curr_id = id;
-					curr_id1 = std::stol(id);
+					
 					DBusersf.close();
-					renterMENU();
+					renterMENU(curr_id);
 				}
 				if (curr_type == "Landlord")
 				{
 					curr_id = id;
-					curr_id1 = std::stol(id);
 					DBusersf.close();
-					landlordMENU();
+					landlordMENU(curr_id);
 				}
 			}
 			words.clear();
@@ -190,16 +191,87 @@ void LOG()
 		DBusersf.close();
 	}
 }
-void landlordMENU()
+void EDIT_PERSONAL_DETAILS(string curr_id)
 {
+	
+	
+	string line;
+	ifstream DBusersf;//name decleartion
+	string word;
+	vector <string> words;
+	DBusersf.open("C:/USERSDATA/newC.txt");
+	size_t pos;
+	size_t len;
+	
+	while (DBusersf >> line)
+	{
+		istringstream iss(line);
+		if (line != "")
+		{
+			while (getline(iss, word, ','))
+			{
+				words.push_back(word);
+			}
+
+
+
+		}
+		
+		if (words[1] == curr_id)
+		{
+
+			while (getline(DBusersf, line))
+			{
+				len= curr_id.length();
+				pos = line.find(curr_id);
+				if (pos != string::npos)
+				{
+
+					line.replace(pos, len, "ada");
+				}
+			}
+			/*if (words[0] == "Landlord")
+			{
+				landlord lUser;
+				cout << "Hi ,to Register as a landlord you have to fill all fields" << endl;
+				cout << "Enter your ID: " << endl;
+				cin >> lUser.id;
+				cout << "Enter your first name: " << endl;
+				cin >> lUser.firstName;
+				cout << "Enter your last name: " << endl;
+				cin >> lUser.lastName;
+				cout << "Enter your password: " << endl;
+				cin >> lUser.password;
+				cout << "Enter your email: " << endl;
+				cin >> lUser.email_address;
+				cout << "Enter your phone number (only numbers): " << endl;
+				cin >> lUser.phoneNumber;
+				cout << "Enter your Address: " << endl;
+				cin >> lUser.address;
+				DBusersf.close();
+			}*/
+
+
+
+		}
+		words.clear();
+	}
+
+
+}
+	
+
+void landlordMENU(string curr_id)
+{
+	
 	cout << GREEN << "Hello landlord please choose the what you want to do for menu " << WHITE << endl;
 	int choose;
 	cout << BLUE << "1.ADD NEW ASSETS " << endl << "2.UPDATE EXIST ASSETS" << endl << "3.EDIT PERSONAL DATA " << endl << "4.REPORTS" << endl << "5.Choose another option" << WHITE << endl;
 	cin >> choose;
 	if (choose <= 4)
-		Landlordchoose(choose);
+		Landlordchoose(choose, curr_id);
 	cout << GREEN << "Choose anoter option : " << endl;
-	cout << RED << "1.BACK " << endl << "2.MENU" << endl << "3.LOGOUT" << endl << "4.EXIT" << "5.CONTINUE AS RENTER" << WHITE << endl;
+	cout << RED << "1.BACK " << endl << "2.MENU" << endl << "3.LOGOUT" << endl << "4.EXIT" <<endl<< "5.CONTINUE AS RENTER" << WHITE << endl;
 	cout << "Your choose is :" << endl;
 	cin >> choose;
 	//if (choose == 1)
@@ -211,13 +283,21 @@ void landlordMENU()
 
 	//}
 	if (choose == 3)
+	{
 		welcome();
+	}
 	if (choose == 4)
+	{
 		EXIT();
+		
+	}
 	if (choose == 5)
-		renterMENU();
+	{
+		renterMENU(curr_id);
+	}
+		
 }
-void renterMENU()
+void renterMENU(string curr_id)
 {
 	cout << GREEN << "Hello renter please choose the what you want to do for menu " << WHITE << endl;
 	int choose;
@@ -225,7 +305,7 @@ void renterMENU()
 	cin >> choose;
 
 	if (choose < 4)
-		Renterchoose(choose);
+		Renterchoose(choose, curr_id);
 
 	cout << GREEN << "Choose anoter option : " << endl;
 	cout << RED << "1.BACK " << endl << "2.MENU" << endl << "3.LOGOUT" << endl << "4.EXIT" << "                                 5.CONTINUE AS LANDLORD" << WHITE << endl;
@@ -246,13 +326,14 @@ void renterMENU()
 	if (choose == 4)
 	{
 		EXIT();
+		
 	}
 	if (choose == 5)
 	{
-		landlordMENU();
+		landlordMENU(curr_id);
 	}
 }
-void Renterchoose(int choose)
+void Renterchoose(int choose, string curr_id)
 {
 	if (choose == 1)
 	{
@@ -264,11 +345,11 @@ void Renterchoose(int choose)
 	}
 	if (choose == 3)
 	{
-		cout << YELLOW << "3.EDIT PERSONAL DATA: //////" << WHITE << endl;
+		EDIT_PERSONAL_DETAILS(curr_id);
 	}
 
 }
-void Landlordchoose(int choose)
+void Landlordchoose(int choose, string curr_id)
 {
 	if (choose == 1)
 	{
@@ -280,7 +361,7 @@ void Landlordchoose(int choose)
 	}
 	if (choose == 3)
 	{
-		cout << YELLOW << "3.EDIT PERSONAL DAT: //////" << WHITE << endl;
+		EDIT_PERSONAL_DETAILS(curr_id);
 	}
 	if (choose == 4)
 	{
@@ -290,8 +371,5 @@ void Landlordchoose(int choose)
 void EXIT()
 {
 	cout << "goodbye" << endl;
-}
-void EDIT_PERSONAL_DETAILS()
-{
-	
+	exit(1);
 }

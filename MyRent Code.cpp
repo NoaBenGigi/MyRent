@@ -45,7 +45,7 @@ void Renterchoose(int choose, string curr_id);
 void renterMENU(string curr_id);
 void EXIT();
 void EDIT_PERSONAL_DETAILS(string curr_id);
-
+string password_validation(string curr_id);
 
 int main()
 {
@@ -259,8 +259,6 @@ void EDIT_PERSONAL_DETAILS(string curr_id)
 
 
 }
-	
-
 void landlordMENU(string curr_id)
 {
 	
@@ -372,4 +370,32 @@ void EXIT()
 {
 	cout << "goodbye" << endl;
 	exit(1);
+}
+string password_validation(string id, string password)
+{
+	string line;
+	ifstream DBusersf;//name decleartion
+	string word;
+	vector <string> words;
+	string curr_id,curr_password,curr_type;
+	DBusersf.open("C:/newC.txt"); // opening the file
+	while (DBusersf >> line)
+	{
+		istringstream iss(line);
+		if (line != "")
+		{
+			while (getline(iss, word, ','))
+			{
+				words.push_back(word);
+			}
+		}
+		curr_password = words[4];
+		curr_id = words[1];
+		if (id == curr_id && password == curr_password)
+		{
+			return words[0];
+		}
+		words.clear();
+	}
+	return "-1";
 }

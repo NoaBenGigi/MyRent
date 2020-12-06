@@ -45,7 +45,7 @@ void Renterchoose(int choose, string curr_id);
 void renterMENU(string curr_id);
 void EXIT();
 void EDIT_PERSONAL_DETAILS(string curr_id);
-string details_validation(string id,string password);
+int details_validation(string id, string password);
 
 int main()
 {
@@ -147,26 +147,25 @@ void LOG()
 	string word;
 	vector <string> words;
 	string curr_id;
-	string validDetails;
-	while(1)
+	int validDetails;
+	while (1)
 	{
 		cout << "Enter your id: ";
 		cin >> id;
 		cout << "Enter your password: ";
 		cin >> password;
-		validDetails=details_validation(id,password);
+		validDetails = details_validation(id, password);
 		switch (validDetails)
 		{
-			case "renter":
-				renterMENU(id);
-				break;
-			case "Landlord":
-				landlordMENU(id);
-				break;
-			default:
-				cout << "USER DOES NOT EXIST, TRY AGAIN" << endl;
+		case 1:
+			renterMENU(id);
+			break;
+		case 2:
+			landlordMENU(id);
+			break;
+		default:
+			cout << "One or more of the details is incorrect, try again!" << endl;
 		}
-		
 	}
 }
 void EDIT_PERSONAL_DETAILS(string curr_id)
@@ -349,13 +348,13 @@ void EXIT()
 	cout << "goodbye" << endl;
 	exit(1);
 }
-string details_validation(string id, string password)
+int details_validation(string id, string password)
 {
 	string line;
 	ifstream DBusersf;//name decleartion
 	string word;
 	vector <string> words;
-	string curr_id,curr_password,curr_type;
+	string curr_id, curr_password, curr_type;
 	DBusersf.open("C:/newC.txt"); // opening the file
 	while (DBusersf >> line)
 	{
@@ -369,13 +368,20 @@ string details_validation(string id, string password)
 		}
 		curr_password = words[4];
 		curr_id = words[1];
+		curr_type = words[0];
 		if (id == curr_id && password == curr_password)
 		{
 			DBusersf.close();
-			return words[0];
+			if(curr_type.compare("Renter"))
+				return 1;
+			else
+			{
+				if (curr_type.compare("Landlord"))
+					return 2;
+			}
 		}
 		words.clear();
 	}
 	DBusersf.close();
-	return "-1";
+	return 3;
 }

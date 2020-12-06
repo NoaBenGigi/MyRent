@@ -68,7 +68,7 @@ void welcome()
 	
 	while((choose!=1)||(choose!=2))
 	{
-		cout<<"Wrong input inserted , please try again";
+		cout<<"Wrong input inserted , please try again"<<endl;
 		cout << MAGENTA << "please choose if you want to register or to log in : " << endl << "1.REGISTER" << endl << "2.LOG-IN" << endl;
 		cin>>choose;
 	}
@@ -85,7 +85,7 @@ void REG()
 	cin >> choose;
 	while((choose!=1)||(choose!=2))
 	{
-		cout<<"Wrong input inserted , please try again";
+		cout<<"Wrong input inserted , please try again"<<endl;
 		cout << GREEN << "please choose if you want to to Register as a : " << WHITE << endl << "1.LANDLORD" << endl << "2.RENTER" << endl;
 		cin>>choose;
 	}

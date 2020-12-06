@@ -65,6 +65,13 @@ void welcome()
 
 	int choose;
 	cin >> choose;
+	
+	while((choose!=1)||(choose!=2))
+	{
+		cout<<"Wrong input inserted , please try again"<<endl;
+		cout << MAGENTA << "please choose if you want to register or to log in : " << endl << "1.REGISTER" << endl << "2.LOG-IN" << endl;
+		cin>>choose;
+	}
 
 	if (choose == 1)
 		REG();
@@ -76,6 +83,13 @@ void REG()
 	int choose;
 	cout << GREEN << "please choose if you want to to Register as a : " << WHITE << endl << "1.LANDLORD" << endl << "2.RENTER" << endl;
 	cin >> choose;
+	while((choose!=1)||(choose!=2))
+	{
+		cout<<"Wrong input inserted , please try again"<<endl;
+		cout << GREEN << "please choose if you want to to Register as a : " << WHITE << endl << "1.LANDLORD" << endl << "2.RENTER" << endl;
+		cin>>choose;
+	}
+	
 	string curr_id;
 	if (choose == 1)
 	{//REGISTER AS LANDLORD
@@ -243,6 +257,13 @@ void landlordMENU(string curr_id)
 	int choose;
 	cout << BLUE << "1.ADD NEW ASSETS " << endl << "2.UPDATE EXIST ASSETS" << endl << "3.EDIT PERSONAL DATA " << endl << "4.REPORTS" << endl << "5.Choose another option" << WHITE << endl;
 	cin >> choose;
+	while((choose!=1)||(choose!=2)||(choose!=3)||(choose!=4)||(choose!=5))
+	{
+		cout<<"Wrong input , please try again"<<endl;
+		cout << BLUE << "1.ADD NEW ASSETS " << endl << "2.UPDATE EXIST ASSETS" << endl << "3.EDIT PERSONAL DATA " << endl << "4.REPORTS" << endl << "5.Choose another option" << WHITE << endl;
+		cin>>choose;
+	}
+	
 	if (choose <= 4)
 		Landlordchoose(choose, curr_id);
 	cout << GREEN << "Choose anoter option : " << endl;
@@ -278,6 +299,12 @@ void renterMENU(string curr_id)
 	int choose;
 	cout << BLUE << "1.SEARCH AVILABLE ASSETS " << endl << "2.ORDER HISTORY" << endl << "3.EDIT PERSONAL DATA " << endl << "4.Choose another option" << WHITE << endl;
 	cin >> choose;
+	while((choose!=1)||(choose!=2)||(choose!=3)||(choose!=4)||(choose!=5))
+	{
+		cout<<"Wrong input , please try again"<<endl;
+		cout << BLUE << "1.SEARCH AVILABLE ASSETS " << endl << "2.ORDER HISTORY" << endl << "3.EDIT PERSONAL DATA " << endl << "4.Choose another option" << WHITE << endl;
+		cin >> choose;
+	}
 
 	if (choose < 4)
 		Renterchoose(choose, curr_id);

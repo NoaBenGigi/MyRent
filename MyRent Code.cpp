@@ -1,4 +1,4 @@
-#define  _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #define SIZE 30
 #define RED "\033[1;31m" 
 #define GREEN "\033[1;32m" 
@@ -58,8 +58,8 @@ void EDIT_PERSONAL_DETAILS(string curr_id);
 int details_validation(string id, string password);
 void AddAsset(string curr_id);
 void UpdateAsset(string curr_id);
-void SearchAsset(string curr_id);
-void sort(string curr_id, int totdays, int range3, int range4);
+//void SearchAsset(string curr_id);
+//void sort(string curr_id, int totdays, int range3, int range4);
 
 int main()
 {
@@ -292,7 +292,7 @@ void EDIT_PERSONAL_DETAILS(string curr_id)
 						cin >> tempR.firstName;
 						words[2] = tempR.firstName;
 					}
-					if (choose == 2
+					if (choose == 2)
 					{
 						cout << "Enter your last name: " << endl;
 						cin >> tempR.lastName;
@@ -341,8 +341,6 @@ void EDIT_PERSONAL_DETAILS(string curr_id)
 	DBusersf.close();
 	Temp1.close();
 }
-}
-
 void landlordMENU(string curr_id)
 {//This func disply the landlord menu
 	
@@ -350,7 +348,7 @@ void landlordMENU(string curr_id)
 	int choose;
 	cout << BLUE << "1.ADD NEW ASSETS " << endl << "2.UPDATE EXIST ASSETS" << endl << "3.EDIT PERSONAL DATA " << endl << "4.REPORTS" << endl << "5.Choose another option" << WHITE << endl;
 	cin >> choose;
-	while((choose!=1)||(choose!=2)||(choose!=3)||(choose!=4)||(choose!=5))
+	while(choose!=1 && choose!=2 && choose!=3 && choose!=4 && choose!=5)
 	{
 		cout<<"Wrong input , please try again"<<endl;
 		cout << BLUE << "1.ADD NEW ASSETS " << endl << "2.UPDATE EXIST ASSETS" << endl << "3.EDIT PERSONAL DATA " << endl << "4.REPORTS" << endl << "5.Choose another option" << WHITE << endl;
@@ -392,7 +390,7 @@ void renterMENU(string curr_id)
 	int choose;
 	cout << BLUE << "1.SEARCH AVILABLE ASSETS " << endl << "2.ORDER HISTORY" << endl << "3.EDIT PERSONAL DATA " << endl << "4.Choose another option" << WHITE << endl;
 	cin >> choose;
-	while((choose!=1)||(choose!=2)||(choose!=3)||(choose!=4)||(choose!=5))
+	while(choose!=1 && choose!=2 && choose!=3 && choose!=4)
 	{
 		cout<<"Wrong input , please try again"<<endl;
 		cout << BLUE << "1.SEARCH AVILABLE ASSETS " << endl << "2.ORDER HISTORY" << endl << "3.EDIT PERSONAL DATA " << endl << "4.Choose another option" << WHITE << endl;
@@ -533,7 +531,7 @@ void UpdateAsset(string curr_id)
 	string address1;
 	cout << "Hello dear landlord please select enter the Asset address you would like to change " << endl;
 	cin >> address1;
-	
+
 	int choose;
 	string line;
 	string word;
@@ -555,87 +553,61 @@ void UpdateAsset(string curr_id)
 		}
 		if (words[3] == address1)
 		{
-			
+
 			Temp2.open("C:/temp1.txt", ios::app);
-			cout << "Which field are you want to change ? " << endl << "1.Country" << endl << "2.City" << endl << "3.Address" << endl << "4.ZIP" << endl << "5.Kind " << endl << "6.about place" << endl << "7.attraction" << endl << "8.Guest n." << endl << "9.Price p.night" << endl << "10.Avilable(yes/no)" << endl << "11.DONE EDIT" << endl;
+			cout << "Which field are you want to change ? " << endl << "1.Country" << endl << "2.City" << endl << "3.Address" << endl << "4.Guest n." << endl << "5.Price p.night" << endl << "6.Avilable(yes/no)" << endl << "7.Number of rooms." << endl << "8.Save & Next" << endl;
 			cin >> choose;
 			asset TempA;
-			while (choose >0 && choose <= 11)
+			while (choose > 0 && choose <= 8)
 			{
-
-
-				if (choose == 1)
-				{
+				if (choose == 1) {
 					cout << "Enter asset Country: " << endl;
 					cin >> TempA.country;
 					words[1] = TempA.country;
 				}
-				if (choose == 2)
-				{
+				if (choose == 2) {
 					cout << "Enter asset City: " << endl;
 					cin >> TempA.city;
 					words[2] = TempA.city;
 				}
-				if (choose == 3)
-				{
+				if (choose == 3) {
 					cout << "Enter asset address: " << endl;
 					cin >> TempA.address;
 					words[3] = TempA.address;
 				}
-				if (choose == 4)
-				{
-					cout << "Edit ZIP : " << endl;
-					cin >> TempA.zip;
-					words[4] = TempA.zip;
+				if (choose == 4) {
+					cout << "Number of guests: " << endl;
+					cin >> TempA.guests;
+					words[4] = TempA.guests;
 				}
-				if (choose == 5)
-				{
-					cout << "Edit Kind of place : " << endl;
-					cin >> TempA.kind;
-					words[5] = TempA.kind;
+				if (choose == 5) {
+					cout << "price per night: " << endl;
+					cin >> TempA.price;
+					words[5] = TempA.price;
 				}
-				if (choose == 6)
-				{
-					cout << "About the place: " << endl;
-					cin >> TempA.about;
-					words[6] = TempA.about;
+				if (choose == 6) {
+					cout << "number of rooms: " << endl;
+					cin >> TempA.price;
+					words[6] = TempA.price;
 				}
-				if (choose == 7)
-				{
-					cout << "Nearby attractions: " << endl;
-					cin >> TempA.attraction;
-					words[7] = TempA.attraction;
+				if (choose == 7) {
+					cout << "AVILABLE : " << endl << "yes/no" << endl;
+					cin >> TempA.avilable;
+					words[7] = TempA.avilable;
 				}
 				if (choose == 8)
 				{
-					cout << "Number of guests: " << endl;
-					cin >> TempA.guests;
-					words[8] = TempA.guests;
-				}
-				if (choose == 9)
-				{
-					cout << "price per night: " << endl;
-					cin >> TempA.price;
-					words[9] = TempA.price;
-				}
-				if (choose == 10)
-				{
-					cout << "AVILABLE : " << endl << "yes/no" << endl;
-					cin >> TempA.avilable;
-					words[10] = TempA.avilable;
-				}
-				if (choose == 11)
-				{
 					break;
 				}
-				cout << "Which field are you want to change ? " << endl << "1.Country" << endl << "2.City" << endl << "3.Address" << endl << "4.ZIP" << endl << "5.Kind " << endl << "6.about place" << endl << "7.attraction" << endl << "8.Guest n." << endl << "9.Price p.night" << endl << "10.Avilable(yes/no)" << endl << "11.DONE EDIT" << endl;
+				cout << "Which field are you want to change ? " << endl << "1.Country" << endl << "2.City" << endl << "3.Address" << endl << "4.Guest n." << endl << "5.Price p.night" << endl << "6.Avilable(yes/no)" << endl << "7.Number of rooms."<<endl<<"8.Save & Next" << endl;
 				cin >> choose;
 			}
-			for (int i = 0; i < 11; i++)
+
+			for (int i = 0; i < 8; i++)
 			{
-				if (i < 10)
+				if (i < 7)
 					Temp2 << words[i] << ",";
-				if (i == 10)
+				if (i == 7)
 					Temp2 << words[i] << endl;
 			}
 			Temp2.close();
@@ -659,9 +631,13 @@ void UpdateAsset(string curr_id)
 	{
 		ASSET << convert;
 	}
+
 	ASSET.close();
 	Temp2.close();
+
+
 }
+/*
 void SearchAsset(string curr_id)
 {
 	string range1, range2;
@@ -758,4 +734,4 @@ void sort(string curr_id, int totdays, int range3, int range4)
 		words.clear();
 	}
 
-}
+}*/

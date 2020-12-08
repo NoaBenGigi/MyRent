@@ -281,7 +281,7 @@ void EDIT_PERSONAL_DETAILS(string curr_id)
 					{
 						break;
 					}
-					cout << RED << "Which field are you want to change ? " << endl << "1.firstname" << endl << "2.lastname" << endl << "3.password" << endl << "4.email" << endl << "5.phone" << endl << "6.address" << endl << "7.DONE EDITING" << WHITE << endl;
+					cout << RED << "Which field are you want to change ? " << endl << "1.firstname" << endl << "2.lastname" << endl << "3.password" << endl << "4.email" << endl << "5.phone" << endl << "6.address" << endl << "7.Save & Next" << WHITE << endl;
 					cin >> choose;
 				}
 				for (int i = 0; i < 8; i++)
@@ -354,7 +354,6 @@ void EDIT_PERSONAL_DETAILS(string curr_id)
 	DBusersf.close();
 	Temp1.close();
 	remove("C:/database/temp.txt");
-
 }
 void landlordMENU(string curr_id)
 {//This func disply the landlord menu
@@ -571,7 +570,7 @@ void AddAsset(string curr_id)
 void UpdateAsset(string curr_id)
 {//This func allow the landlord update his assets
 	string address1;
-	cout << "Hello dear landlord please select enter the Asset address you would like to change " << endl;
+	cout << "Hello landlord,Enter the address of the asset you want to update: " << endl;
 	cin >> address1;
 
 	int choose;
@@ -580,7 +579,7 @@ void UpdateAsset(string curr_id)
 	vector <string> words;
 	ofstream Temp2;//name decleartion
 	ifstream ASSETda;//name decleartion
-
+	bool flag = false;//var that save if landlord made a change in his assets
 	ASSETda.open("C:/database/ASSETda.txt");
 	while (ASSETda >> line)
 	{
@@ -592,8 +591,9 @@ void UpdateAsset(string curr_id)
 				words.push_back(word);
 			}
 		}
-		if (words[3] == address1)
+		if (words[3] == address1 && words[0] == curr_id)
 		{
+			flag = true;
 			Temp2.open("C:/database/temp1.txt", ios::app);
 			cout << "Which field are you want to change ? " << endl << "1.Country" << endl << "2.City" << endl << "3.Address" << endl << "4.Guest n." << endl << "5.Price p.night" << endl << "6.Number of rooms" << endl << "7.Avilable(yes/no)" << endl << "8.Save & Next" << endl;
 			cin >> choose;
@@ -670,7 +670,10 @@ void UpdateAsset(string curr_id)
 	{
 		ASSET << convert;
 	}
-
+	if (!flag)
+	{
+		cout << "Wrong address!"<<endl;
+	}
 	ASSET.close();
 	Temp3.close();
 	remove("C:/database/temp1.txt");

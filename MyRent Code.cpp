@@ -79,8 +79,8 @@ void welcome()
 
 	int choose;
 	cin >> choose;
-	
-	while(choose != 1 && choose != 2)
+
+	while (choose != 1 && choose != 2)
 	{
 		cout << "Wrong input inserted , please try again" << endl;
 		cout << MAGENTA << "please choose if you want to register or to log in : " << endl << "1.REGISTER" << endl << "2.LOG-IN" << endl;
@@ -96,15 +96,15 @@ void REG()
 	int choose;	//var that save the user choise
 	cout << GREEN << "please choose if you want to to Register as a : " << WHITE << endl << "1.LANDLORD" << endl << "2.RENTER" << endl;
 	cin >> choose;
-	while((choose!=1)||(choose!=2))
+	while ((choose != 1) && (choose != 2))
 	{
-		cout<<"Wrong input inserted , please try again"<<endl;
+		cout << "Wrong input inserted , please try again" << endl;
 		cout << GREEN << "please choose if you want to to Register as a : " << WHITE << endl << "1.LANDLORD" << endl << "2.RENTER" << endl;
-		cin>>choose;
+		cin >> choose;
 	}
-	
+
 	string curr_id; //var that will save the current id
-	
+
 	if (choose == 1)		//Register as a Landlord
 	{
 		landlord lUser;
@@ -126,7 +126,7 @@ void REG()
 		curr_id = lUser.id;
 
 		ofstream BDusersf;//name decleartion
-		BDusersf.open("C:/DBusers.txt", ios::app); 	//opening the file
+		BDusersf.open("C:/database/DBusers.txt", ios::app); 	//opening the file
 		BDusersf << "Landlord" << ',' <<		//save the new landlord in DBusers
 			lUser.id << ',' <<
 			lUser.firstName << ',' <<
@@ -152,7 +152,7 @@ void REG()
 		curr_id = rUser.id;
 
 		ofstream BDusersf;//name decleartion
-		BDusersf.open("C:/DBusers.txt", ios::app); // opening the file
+		BDusersf.open("C:/database/DBusers.txt", ios::app); // opening the file
 		BDusersf << "Renter" << ',' <<		//save the new renter in DBusers
 			rUser.id << ',' <<
 			rUser.firstName << ',' <<
@@ -206,8 +206,8 @@ void EDIT_PERSONAL_DETAILS(string curr_id)
 	ofstream Temp;//name decleartion
 	int choose;
 
-	DBusersf.open("C:/DBusers.txt");
-	
+	DBusersf.open("C:/database/DBusers.txt");
+
 	while (DBusersf >> line)
 	{
 		istringstream iss(line);
@@ -218,10 +218,10 @@ void EDIT_PERSONAL_DETAILS(string curr_id)
 				words.push_back(word);
 			}
 		}
-		if (words[1] == curr_id)
+		if (words[1].compare(curr_id) == 0)
 		{
-			Temp.open("C:/DBusers.txt", ios::app);
-			if (words[0] == "Landlord")
+			Temp.open("C:/database/temp.txt", ios::app);
+			if (words[0].compare("Landlord") == 0)
 			{
 				cout << RED << "Which field are you want to change ? " << endl << "1.firstname" << endl << "2.lastname" << endl << "3.password" << endl << "4.email" << endl << "5.phone" << endl << "6.address" << endl << "7.Save & Next" << WHITE << endl;
 				cin >> choose;
@@ -279,10 +279,10 @@ void EDIT_PERSONAL_DETAILS(string curr_id)
 						Temp << words[i] << endl;
 				}
 			}
-			if (words[0] == "Renter")
+			if (words[0].compare("Renter") == 0)
 			{
 				renter tempR;
-				cout << RED << "Which field are you want to change ? " << endl << "1.firstname" << endl << "2.lastname" << endl << "3.password" << endl << "4.email" << endl << "5.phone" << endl << "6.address" << endl << "7.Save & Next" << WHITE << endl;
+				cout << RED << "Which field are you want to change ? " << endl << "1.firstname" << endl << "2.lastname" << endl << "3.password" << endl << "4.Save & Next" << WHITE << endl;
 				cin >> choose;
 				while (choose >= 0 && choose < 7)
 				{
@@ -308,7 +308,7 @@ void EDIT_PERSONAL_DETAILS(string curr_id)
 					{
 						break;
 					}
-					cout << RED << "Which field are you want to change ? " << endl << "1.firstname" << endl << "2.lastname" << endl << "3.password" << endl << "4.DONE EDITING" << WHITE << endl;
+					cout << RED << "Which field are you want to change ? " << endl << "1.firstname" << endl << "2.lastname" << endl << "3.password" << endl << "4.Save & Next" << WHITE << endl;
 					cin >> choose;
 				}
 				for (int i = 0; i < 5; i++)
@@ -323,7 +323,7 @@ void EDIT_PERSONAL_DETAILS(string curr_id)
 		}
 		else
 		{
-			Temp.open("C:/temp.txt", ios::app);
+			Temp.open("C:/database/temp.txt", ios::app);
 			Temp << line << endl;
 			Temp.close();
 		}
@@ -331,39 +331,41 @@ void EDIT_PERSONAL_DETAILS(string curr_id)
 	}
 	string convert;
 	ofstream BDusersf;//name decleartion
-	BDusersf.open("C:/DBusers.txt", ios::trunc);
+	BDusersf.open("C:/database/DBusers.txt", ios::trunc);
 	ifstream Temp1;
-	Temp1.open("C:/temp.txt");
+	Temp1.open("C:/database/temp.txt");
 	while (Temp1 >> convert)
 	{
 		BDusersf << convert << endl;
 	}
 	DBusersf.close();
 	Temp1.close();
+	remove("C:/database/temp.txt");
+
 }
 void landlordMENU(string curr_id)
 {//This func disply the landlord menu
-	
+
 	cout << GREEN << "Hello landlord please choose the what you want to do for menu " << WHITE << endl;
 	int choose;
 	cout << BLUE << "1.ADD NEW ASSETS " << endl << "2.UPDATE EXIST ASSETS" << endl << "3.EDIT PERSONAL DATA " << endl << "4.REPORTS" << endl << "5.Choose another option" << WHITE << endl;
 	cin >> choose;
-	while(choose!=1 && choose!=2 && choose!=3 && choose!=4 && choose!=5)
+	while (choose != 1 && choose != 2 && choose != 3 && choose != 4 && choose != 5)
 	{
-		cout<<"Wrong input , please try again"<<endl;
+		cout << "Wrong input , please try again" << endl;
 		cout << BLUE << "1.ADD NEW ASSETS " << endl << "2.UPDATE EXIST ASSETS" << endl << "3.EDIT PERSONAL DATA " << endl << "4.REPORTS" << endl << "5.Choose another option" << WHITE << endl;
-		cin>>choose;
+		cin >> choose;
 	}
-	
+
 	if (choose <= 4)
 		Landlordchoose(choose, curr_id);
 	cout << GREEN << "Choose anoter option : " << endl;
-	cout << RED << "1.BACK " << endl << "2.MENU" << endl << "3.LOGOUT" << endl << "4.EXIT" <<endl<< "5.CONTINUE AS RENTER" << WHITE << endl;
+	cout << RED << "1.BACK " << endl << "2.MENU" << endl << "3.LOGOUT" << endl << "4.EXIT" << endl << "5.CONTINUE AS RENTER" << WHITE << endl;
 	cout << "Your choose is :" << endl;
 	cin >> choose;
 	//if (choose == 1)
 	//{
-
+	//	back
 	//}
 	//if (choose == 2)
 	//{
@@ -376,13 +378,13 @@ void landlordMENU(string curr_id)
 	if (choose == 4)
 	{
 		EXIT();
-		
+
 	}
 	if (choose == 5)
 	{
 		renterMENU(curr_id);
 	}
-		
+
 }
 void renterMENU(string curr_id)
 {//This func disply the renter menu
@@ -390,9 +392,9 @@ void renterMENU(string curr_id)
 	int choose;
 	cout << BLUE << "1.SEARCH AVILABLE ASSETS " << endl << "2.ORDER HISTORY" << endl << "3.EDIT PERSONAL DATA " << endl << "4.Choose another option" << WHITE << endl;
 	cin >> choose;
-	while(choose!=1 && choose!=2 && choose!=3 && choose!=4)
+	while (choose != 1 && choose != 2 && choose != 3 && choose != 4)
 	{
-		cout<<"Wrong input , please try again"<<endl;
+		cout << "Wrong input , please try again" << endl;
 		cout << BLUE << "1.SEARCH AVILABLE ASSETS " << endl << "2.ORDER HISTORY" << endl << "3.EDIT PERSONAL DATA " << endl << "4.Choose another option" << WHITE << endl;
 		cin >> choose;
 	}
@@ -419,7 +421,7 @@ void renterMENU(string curr_id)
 	if (choose == 4)
 	{
 		EXIT();
-		
+
 	}
 	if (choose == 5)
 	{
@@ -444,9 +446,9 @@ void Renterchoose(int choose, string curr_id)
 void Landlordchoose(int choose, string curr_id)
 {//This func directed the user according to his choise
 	if (choose == 1)
-		cout << YELLOW << "ADD NEW ASSETS : //////" << WHITE << endl;
+		AddAsset(curr_id);
 	if (choose == 2)
-		cout << YELLOW << "UPDATE EXIST ASSETS : //////" << WHITE << endl;
+		UpdateAsset(curr_id);
 	if (choose == 3)
 		EDIT_PERSONAL_DETAILS(curr_id);
 	if (choose == 4)
@@ -464,7 +466,7 @@ int details_validation(string id, string password)
 	string word;
 	vector <string> words;
 	string curr_id, curr_password, curr_type;
-	DBusersf.open("C:/DBusers.txt"); // opening the file
+	DBusersf.open("C:/database/DBusers.txt"); // opening the file
 	while (DBusersf >> line)
 	{
 		istringstream iss(line);
@@ -481,11 +483,11 @@ int details_validation(string id, string password)
 		if (id == curr_id && password == curr_password)
 		{
 			DBusersf.close();
-			if(curr_type.compare("Renter"))
+			if (curr_type.compare("Renter") == 0)
 				return 1;
 			else
 			{
-				if (curr_type.compare("Landlord"))
+				if (curr_type.compare("Landlord") == 0)
 					return 2;
 			}
 		}
@@ -514,14 +516,14 @@ void AddAsset(string curr_id)
 	cin >> L.roomNum;
 	L.avilable = "yes";
 	ofstream ASSETda;//name decleartion
-	ASSETda.open("C:/ASSETda.txt", ios::app); // opening the file
+	ASSETda.open("C:/database/ASSETda.txt", ios::app); // opening the file
 	ASSETda << curr_id << ',' <<
 		L.country << ',' <<
 		L.city << ',' <<
 		L.address << ',' <<
 		L.guests << ',' <<
 		L.price << ',' <<
-		L.roomNum<<','<<
+		L.roomNum << ',' <<
 		L.avilable <<
 		'\n';
 	ASSETda.close();
@@ -539,10 +541,9 @@ void UpdateAsset(string curr_id)
 	ofstream Temp2;//name decleartion
 	ifstream ASSETda;//name decleartion
 
-	ASSETda.open("C:/ASSETda.txt");
+	ASSETda.open("C:/database/ASSETda.txt");
 	while (ASSETda >> line)
 	{
-
 		istringstream iss(line);
 		if (line != "")
 		{
@@ -553,9 +554,8 @@ void UpdateAsset(string curr_id)
 		}
 		if (words[3] == address1)
 		{
-
-			Temp2.open("C:/temp1.txt", ios::app);
-			cout << "Which field are you want to change ? " << endl << "1.Country" << endl << "2.City" << endl << "3.Address" << endl << "4.Guest n." << endl << "5.Price p.night" << endl << "6.Avilable(yes/no)" << endl << "7.Number of rooms." << endl << "8.Save & Next" << endl;
+			Temp2.open("C:/database/temp1.txt", ios::app);
+			cout << "Which field are you want to change ? " << endl << "1.Country" << endl << "2.City" << endl << "3.Address" << endl << "4.Guest n." << endl << "5.Price p.night" << endl << "6.Number of rooms" << endl << "7.Avilable(yes/no)" << endl << "8.Save & Next" << endl;
 			cin >> choose;
 			asset TempA;
 			while (choose > 0 && choose <= 8)
@@ -599,10 +599,9 @@ void UpdateAsset(string curr_id)
 				{
 					break;
 				}
-				cout << "Which field are you want to change ? " << endl << "1.Country" << endl << "2.City" << endl << "3.Address" << endl << "4.Guest n." << endl << "5.Price p.night" << endl << "6.Avilable(yes/no)" << endl << "7.Number of rooms."<<endl<<"8.Save & Next" << endl;
+				cout << "Which field are you want to change ? " << endl << "1.Country" << endl << "2.City" << endl << "3.Address" << endl << "4.Guest n." << endl << "5.Price p.night" << endl << "6.Avilable(yes/no)" << endl << "7.Number of rooms." << endl << "8.Save & Next" << endl;
 				cin >> choose;
 			}
-
 			for (int i = 0; i < 8; i++)
 			{
 				if (i < 7)
@@ -614,7 +613,7 @@ void UpdateAsset(string curr_id)
 		}
 		else
 		{
-			Temp2.open("C:/temp1.txt", ios::app);
+			Temp2.open("C:/database/temp1.txt", ios::app);
 			Temp2 << line << endl;
 			Temp2.close();
 		}
@@ -623,19 +622,18 @@ void UpdateAsset(string curr_id)
 	}
 	string convert;
 	ofstream ASSET;//name decleartion
-	ASSET.open("C:/ASSETda.txt", ios::trunc); // opening the file
+	ASSET.open("C:/database/ASSETda.txt", ios::trunc); // opening the file
 
 	ifstream Temp3;
-	Temp3.open("C:/temp1.txt");
+	Temp3.open("C:/database/temp1.txt");
 	while (Temp3 >> convert)
 	{
 		ASSET << convert;
 	}
 
 	ASSET.close();
-	Temp2.close();
-
-
+	Temp3.close();
+	remove("C:/database/temp1.txt");
 }
 /*
 void SearchAsset(string curr_id)
@@ -727,9 +725,9 @@ void sort(string curr_id, int totdays, int range3, int range4)
 		}
 		if (words[10] == "yes")
 		{
-			
+
 			cout << words[1] << "     " << words[2] << "     " << words[3] << "     " << words[8] << "     " << words[9] << "     " << words[10] << endl;
-			
+
 		}
 		words.clear();
 	}

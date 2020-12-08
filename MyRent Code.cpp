@@ -20,7 +20,7 @@ using namespace std;
 
 struct landlord
 {
-	long id=0;
+	long id=0000;
 	string firstName;
 	string lastName;
 	string password;
@@ -30,7 +30,7 @@ struct landlord
 };
 struct renter
 {
-	long id=0;
+	long id=0000;
 	string firstName;
 	string lastName;
 	string password;
@@ -59,9 +59,15 @@ int details_validation(string id, string password);
 bool idAlreadyExists(string id);
 void AddAsset(string curr_id);
 void UpdateAsset(string curr_id);
-//void SearchAsset(string curr_id);
-//void sort(string curr_id, int totdays, int range3, int range4);
+void renterUpgrade(string curr_id);
+void Search_res(int day1, int month1, int year1, int day2, int month2, int year2, string country, string city, string address, int totaldays, string guests = "0", int range3 = 0, int range4 = 0, string rooms = "0");
+void SearchAsset(string curr_id);
+bool priceRange(string pernight, int totaldays, int range3, int range4);
+bool dateCheck(int day1, int month1, int year1, int day2, int month2, int year2);
+void ORDERS_DB_UPDATE(string order_landlord_id, int day1, int month1, int year1, int day2, int month2, int year2, string order_address, string order_guest_number1, int order_payment_sum1, string order_landlord_name, string order_landlord_mail, string order_landlord_phone1, string order_rank);
 
+
+int order_number = 0;
 int main()
 {
 	welcome();
@@ -77,7 +83,7 @@ void welcome()
 	cout << BLOCKCOLOR << "                                                                           " << WHITE << endl;
 	cout << endl << "My-Rent system offers rental online marketplace for lodging, primarily homestays, or tourism experiences ." << endl;
 	cout << MAGENTA << "please choose if you want to register or to log in : " << endl << "1.REGISTER" << endl << "2.LOG-IN" << endl;
-
+	cout << "global env  " << order_number << endl;
 	int choose;
 	cin >> choose;
 
@@ -112,7 +118,7 @@ void REG()
 		cout << "Hi ,to Register as a landlord you have to fill all fields" << endl;
 		cout << "Enter your ID: " << endl;
 		cin >> curr_id;
-		while(idAlreadyExists(curr_id))
+		while (idAlreadyExists(curr_id))
 		{
 			cout << "ID number already exists in database, please enter another id number: " << endl;
 			cin >> curr_id;
@@ -130,7 +136,6 @@ void REG()
 		cin >> lUser.phoneNumber;
 		cout << "Enter your Address: " << endl;
 		cin >> lUser.address;
-		curr_id = lUser.id;
 
 		ofstream BDusersf;//name decleartion
 		BDusersf.open("C:/database/DBusers.txt", ios::app); 	//opening the file
@@ -162,7 +167,6 @@ void REG()
 		cin >> rUser.lastName;
 		cout << "Enter your password: " << endl;
 		cin >> rUser.password;
-		curr_id = rUser.id;
 
 		ofstream BDusersf;//name decleartion
 		BDusersf.open("C:/database/DBusers.txt", ios::app); // opening the file
@@ -173,6 +177,7 @@ void REG()
 			rUser.password << '\n';
 		BDusersf.close();
 	}
+	cout << "id::::" << curr_id;
 	if (choose == 1)		//go to landlordMENU
 		landlordMENU(curr_id);
 	if (choose == 2)		//go to renterMENU
@@ -187,7 +192,6 @@ void LOG()
 	ifstream DBusersf;//name decleartion
 	string word;
 	vector <string> words;
-	string curr_id;
 	int validDetails;
 	while (1)
 	{
@@ -437,6 +441,7 @@ void renterMENU(string curr_id)
 	}
 	if (choose == 5)
 	{
+		renterUpgrade(curr_id);
 		landlordMENU(curr_id);
 	}
 }
@@ -627,8 +632,8 @@ void UpdateAsset(string curr_id)
 				}
 				if (choose == 6) {
 					cout << "number of rooms: " << endl;
-					cin >> TempA.price;
-					words[6] = TempA.price;
+					cin >> TempA.roomNum;
+					words[6] = TempA.roomNum;
 				}
 				if (choose == 7) {
 					cout << "AVILABLE : " << endl << "yes/no" << endl;
@@ -672,92 +677,24 @@ void UpdateAsset(string curr_id)
 	}
 	if (!flag)
 	{
-		cout << "Wrong address!"<<endl;
+		cout << "Wrong address!" << endl;
 	}
 	ASSET.close();
 	Temp3.close();
 	remove("C:/database/temp1.txt");
 }
-/*
-void SearchAsset(string curr_id)
+void renterUpgrade(string curr_id)
 {
-	string range1, range2;
-	string kind;
-	string adult, children,guests;
-	string country, city, address;
-	string notes;
-	int range3, range4;
-	int choose;
-	int totdays;
-
-	cout << "Hello Renter please search by your preference:  " << endl;
-	cout << "The dates you are plan to stay are from : " << endl;
-	cin >> range1;
-	cout << "to : " << endl;
-	cin >> range2;
-	cout << "TOTAL DAYS : " << endl;
-	cin >> totdays;
-
-	cout << "Select you type : 1.unit " << endl << "2.two rooms" << endl << "3.three rooms" << endl << "4.four rooms" << endl;
-	cin >> choose;
-	if (choose == 1)
-		kind = "unit";
-	if (choose == 2)
-		kind = "two rooms";
-	if (choose == 3)
-		kind = "three rooms";
-	if (choose == 4)
-		kind = "four rooms";
-
-	cout << "Number of total guests are : " << endl;
-	cin >> guests;
-	cout << "number of ADULTS : " << endl;
-	cin >> adult;
-	cout << "number of CHILDREN : " << endl;
-	cin >> children;
-
-	cout << "The countery you looking for : " << endl;
-	cin >> country;
-	cout << "The city you looking for: " << endl;
-	cin >> city;
-	cout << "the address you looking for : " << endl;
-	cin >> address;
-
-	cout << "Your price p.night range " << endl;
-	cout << "FROM : " << endl;
-	cin >> range3;
-	cout << "TO : " << endl;
-	cin >> range4;
-
-	sort(curr_id, totdays, range3, range4);
-
-}
-
-void sort(string curr_id, int totdays, int range3, int range4)
-{
+	cout << "Hello Renter to upgrade for landlord please select the fill " << endl;
 	string line;
+	ifstream DBusersf;//name decleartion
 	string word;
 	vector <string> words;
-	ifstream ASSETda;//name decleartion
-
-	string country;
-	string city;
-	string address;
-	string zip;
-	string kind;
-	string about;
-	string attraction;
-	string guests;
-	string price;
-	string avilable;
-
-	cout << "ALL AVILABLE SEARCH RESULT :" << endl;
-	cout << "  COUNTRY   |   CITY   |   ADDRESS  |   GUESTS   |   PRICE   |  AVILABLE(Y\N)   " << endl;
-	cout <<"----------------------------------------------------------"<<endl;
-	ASSETda.open("C:/USERSDATA/ASSETda.txt");
-	while (ASSETda >> line)
+	ofstream Temp;
+	string address, email, phone;
+	DBusersf.open("C:/database/DBusers.txt");
+	while (DBusersf >> line)
 	{
-
 		istringstream iss(line);
 		if (line != "")
 		{
@@ -766,13 +703,345 @@ void sort(string curr_id, int totdays, int range3, int range4)
 				words.push_back(word);
 			}
 		}
-		if (words[10] == "yes")
+
+		if (curr_id == words[1])
 		{
+			Temp.open("C:/database/temp2.txt", ios::app);
+			cout << "Your have to fill those fields to become a ranter : " << endl;
 
-			cout << words[1] << "     " << words[2] << "     " << words[3] << "     " << words[8] << "     " << words[9] << "     " << words[10] << endl;
+			cout << "Enter your email: " << endl;
+			cin >> email;
 
+			cout << "Enter your phone number (only numbers): " << endl;
+			cin >> phone;
+
+			cout << "Enter your Address: " << WHITE << endl;
+			cin >> address;
+
+			words[0] = "Landlord";
+			words[4] = words[4] + "," + email + "," + phone + "," + address;
+
+			for (int i = 0; i < 5; i++)
+			{
+				if (i < 4)
+					Temp << words[i] << ",";
+				if (i == 4)
+					Temp << words[i] << endl;
+			}
+			Temp.close();
+		}
+		else
+		{
+			Temp.open("C:/database/temp2.txt", ios::app);
+			Temp << line << endl;
+			Temp.close();
 		}
 		words.clear();
 	}
+	Temp.close();
+	string convert;
+	ofstream BDusersf;//name decleartion
+	BDusersf.open("C:/database/DBusers.txt", ios::trunc);
+	ifstream Temp2;
+	Temp2.open("C:/database/temp2.txt");
+	while (Temp2 >> convert)
+	{
+		BDusersf << convert << endl;
+	}
+	DBusersf.close();
+	Temp2.close();
+	remove("C:/database/temp2.txt");
+}
+void SearchAsset(string curr_id)
+{
+	int day1, day2, month1, month2, year1, year2;
+	string country, city, address;
+	string guests, rooms;
+	int  totaldays;
+	int range3, range4;
+	int choose;
+	cout << "-------BASIC SEARCH------  " << endl;
+	cout << "Hello Renter please search by your preference:  " << endl;
+	cout << "The dates you are plan to stay are from : " << endl;
+	cout << "DAY: " << endl;
+	cin >> day1;
+	cout << "MONTH: " << endl;
+	cin >> month1;
+	cout << "YEAR:" << endl;
+	cin >> year1;
+	cout << "to : " << endl;
+	cout << "DAY: " << endl;
+	cin >> day2;
+	cout << "MONTH: " << endl;
+	cin >> month2;
+	cout << "YEAR:" << endl;
+	cin >> year2;
+	cout << "Total days: " << endl;
+	cin >> totaldays;
 
-}*/
+	cout << "The country you looking for : " << endl;
+	cin >> country;
+	cout << "The city you looking for: " << endl;
+	cin >> city;
+	cout << "the address you looking for : " << endl;
+	cin >> address;
+
+	cout << "Continue to advanced search ?   " << endl;
+	cout << "1. Yes" << endl;
+	cout << "2. No" << endl;
+	cin >> choose;
+	if (choose == 1)
+	{
+		cout << "Number of total guests are : " << endl;
+		cin >> guests;
+		cout << "Your price p.night range " << endl;
+		cout << "FROM : " << endl;
+		cin >> range3;
+		cout << "TO : " << endl;
+		cin >> range4;
+		cout << "Select you type :" << endl << "1.unit " << endl << "2.two rooms" << endl << "3.three rooms" << endl << "4.four rooms" << endl;
+		cin >> choose;
+		if (choose == 1)
+			rooms = "1";
+		if (choose == 2)
+			rooms = "2";
+		if (choose == 3)
+			rooms = "3";
+		if (choose == 4)
+			rooms = "4";
+		Search_res(day1, month1, year1, day2, month2, year2, country, city, address, totaldays, guests, range3, range4, rooms);
+	}
+	if (choose == 2)
+		Search_res(day1, month1, year1, day2, month2, year2, country, city, address, totaldays);
+}
+void Search_res(int day1, int month1, int year1, int day2, int month2, int year2, string country, string city, string address, int totaldays, string guests, int range3, int range4, string rooms)
+{
+	string address1;
+	string line;
+	string word;
+	vector <string> words;
+	ifstream ASSETda;
+
+	string land_name;
+	string land_email;
+	string land_phone;
+
+	string line1;
+	string word1;
+	vector <string> words1;
+	ifstream DBusersf;
+
+	int res = 1;
+	int choose;
+	int payment_sum;
+	int tablechoose;
+
+	int idArr[60] = { 0 };
+	long convertid;
+
+	ASSETda.open("C:/database/ASSETda.txt");
+	while (ASSETda >> line)
+	{
+		istringstream iss(line);
+		if (line != "")
+		{
+			while (getline(iss, word, ','))
+			{
+				words.push_back(word);
+			}
+		}
+
+		if (words[1] == country && words[2] == city && dateCheck(day1, month1, year1, day2, month2, year2) && words[7] == "yes")
+		{
+			if (rooms != "0" && guests != "0" && range3 != 0 && range4 != 0)
+			{
+				if (words[6] == rooms && words[4] == guests && priceRange(words[5], totaldays, range3, range4))
+				{
+					cout << endl << endl;
+					cout << "RESULT number :" << res << "|Location : " << words[1] << "," << words[2] << "," << words[3] << "| Room Num :" << words[6] << "|price per night :" << words[5] << "|asset rating " << endl;
+					convertid = stoi(words[0]);
+					idArr[res - 1] = convertid;
+					res++;
+					cout << endl << endl;
+				}
+			}
+			else
+			{
+				cout << endl << endl;
+				cout << "RESULT number :" << res << "|Location : " << words[1] << "," << words[2] << "," << words[3] << "| Room Num :" << words[6] << "|price per night :" << words[5] << "|asset rating " << endl;
+				convertid = stoi(words[0]);
+				idArr[res - 1] = convertid;
+				res++;
+				cout << endl << endl;
+			}
+		}
+		words.clear();
+	}
+	ASSETda.close();
+
+	int id1;
+	cout << "Would you like to make an order or sort by perferences ? " << endl;
+	cout << "1.make an order" << endl;
+	cout << "2.sort" << endl;
+	cin >> choose;
+	if (choose == 1)
+	{
+		cout << " your option from Result table is : " << endl;
+		cin >> tablechoose;
+		id1 = idArr[tablechoose - 1];
+		ASSETda.open("C:/database/ASSETda.txt");
+		while (ASSETda >> line)
+		{
+			istringstream iss(line);
+			if (line != "")
+			{
+				while (getline(iss, word, ','))
+				{
+					words.push_back(word);
+				}
+			}
+			if (stoi(words[0]) == id1 && words[3] == address)
+			{
+				break;
+			}
+
+			words.clear();
+		}
+		ASSETda.close();
+		DBusersf.open("C:/database/DBusers.txt");
+		while (DBusersf >> line1)
+		{
+			istringstream iss(line1);
+			if (line1 != "")
+			{
+				while (getline(iss, word1, ','))
+				{
+					words1.push_back(word1);
+				}
+			}
+
+			if (stoi(words1[1]) == id1)
+			{
+				land_name = words1[2];
+				land_phone = words1[6];
+				land_email = words1[5];
+				DBusersf.close();
+				break;
+			}
+			words1.clear();
+		}
+		payment_sum = stoi(words[5]);
+		payment_sum *= totaldays;
+		address1 = words[1] + "." + words[2] + "." + words[3];
+		ASSETda.close();
+		//ORDERS_DB_UPDATE(words[0], day1, month1, year1, day2, month2, year2, address1, words[4], payment_sum, land_name, land_email, land_phone, "***8");
+	}
+
+	if (choose == 2)
+	{//sort func!!!!!!!!!!!
+
+
+
+
+
+
+
+
+	}
+}
+bool dateCheck(int day1, int month1, int year1, int day2, int month2, int year2)
+{
+	string line;
+	string word;
+	vector <string> words;
+	ifstream ORDERS_DB;
+
+	int linescount = 0;
+	int entryDate;
+	int startDate;
+	int endDate;
+	int Dday1, Dmonth1, Dyear1;
+	int Dday2, Dmonth2, Dyear2;
+
+
+	ORDERS_DB.open("C:/database/ORDERS_DB.txt");
+	while (ORDERS_DB >> line)
+	{
+		linescount++;
+		istringstream iss(line);
+		if (line != "")
+		{
+			while (getline(iss, word, ','))
+			{
+				words.push_back(word);
+			}
+		}
+
+		Dday1 = stoi(words[2]);
+		Dmonth1 = stoi(words[3]);
+		Dyear1 = stoi(words[4]);
+		Dday2 = stoi(words[5]);
+		Dmonth2 = stoi(words[6]);
+		Dyear2 = stoi(words[7]);
+
+		entryDate = (year1 * 10000) + (month1 * 100) + day1;
+		startDate = (Dyear1 * 10000) + (Dmonth1 * 100) + Dday1;
+		endDate = (Dyear2 * 10000) + (Dmonth2 * 100) + Dday2;
+		if (entryDate >= startDate && entryDate <= endDate) {
+
+			return false;
+		}
+
+		entryDate = (year2 * 10000) + (month2 * 100) + day2;
+		startDate = (Dyear1 * 10000) + (Dmonth1 * 100) + Dday1;
+		endDate = (Dyear2 * 10000) + (Dmonth2 * 100) + Dday2;
+		if (entryDate >= startDate && entryDate <= endDate) {
+
+			return false;
+		}
+	}
+	if (linescount == 0)
+	{
+		ORDERS_DB.close();
+		return true;
+	}
+
+	ORDERS_DB.close();
+	return true;
+}
+bool priceRange(string pernight, int totaldays, int range3, int range4)
+{
+	int pricepernight;
+	pricepernight = stoi(pernight);
+	if (pricepernight >= range3 && pricepernight <= range4)
+	{
+		return 1;
+	}
+	return 0;
+}
+void ORDERS_DB_UPDATE(string order_landlord_id, int day1, int month1, int year1, int day2, int month2, int year2, string order_address, string order_guest_number1, int order_payment_sum1, string order_landlord_name, string order_landlord_mail, string order_landlord_phone1, string order_rank)
+{
+	long curr_id = stoi(order_landlord_id);
+	int order_guest_number = stoi(order_guest_number1);
+	int order_landlord_phone = stoi(order_landlord_phone1);
+	order_number++;
+	ofstream ORDERS_DB;
+	ORDERS_DB.open("C:/database/ORDERS_DB.txt", ios::app);
+	ORDERS_DB << order_number << ',' <<
+		curr_id << ',' <<
+		day1 << ',' <<
+		month1 << ',' <<
+		year1 << ',' <<
+		day2 << ',' <<
+		month2 << ',' <<
+		year2 << ',' <<
+		order_address << ',' <<
+		order_guest_number << ',' <<
+		order_payment_sum1 << ',' <<
+		order_landlord_name << ',' <<
+		order_landlord_mail << ',' <<
+		order_landlord_phone << ',' <<
+		order_rank <<
+		'\n';
+	ORDERS_DB.close();
+}

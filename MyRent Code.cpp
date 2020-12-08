@@ -20,7 +20,7 @@ using namespace std;
 
 struct landlord
 {
-	long id = 00000;
+	long id=0;
 	string firstName;
 	string lastName;
 	string password;
@@ -30,7 +30,7 @@ struct landlord
 };
 struct renter
 {
-	long id = 00000;
+	long id=0;
 	string firstName;
 	string lastName;
 	string password;
@@ -56,6 +56,7 @@ void renterMENU(string curr_id);
 void EXIT();
 void EDIT_PERSONAL_DETAILS(string curr_id);
 int details_validation(string id, string password);
+bool idAlreadyExists(string id);
 void AddAsset(string curr_id);
 void UpdateAsset(string curr_id);
 //void SearchAsset(string curr_id);
@@ -110,7 +111,13 @@ void REG()
 		landlord lUser;
 		cout << "Hi ,to Register as a landlord you have to fill all fields" << endl;
 		cout << "Enter your ID: " << endl;
-		cin >> lUser.id;
+		cin >> curr_id;
+		while(idAlreadyExists(curr_id))
+		{
+			cout << "ID number already exists in database, please enter another id number: " << endl;
+			cin >> curr_id;
+		}
+		lUser.id = stoi(curr_id);
 		cout << "Enter your first name: " << endl;
 		cin >> lUser.firstName;
 		cout << "Enter your last name: " << endl;
@@ -142,7 +149,13 @@ void REG()
 		renter rUser;
 		cout << "Hi ,to Register as a Renter you have to fill all fields" << endl;
 		cout << "Enter your ID: " << endl;
-		cin >> rUser.id;
+		cin >> curr_id;
+		while (idAlreadyExists(curr_id))
+		{
+			cout << "ID number already exists in database, please enter another id number: " << endl;
+			cin >> curr_id;
+		}
+		rUser.id = stoi(curr_id);
 		cout << "Enter your first name: " << endl;
 		cin >> rUser.firstName;
 		cout << "Enter your last name: " << endl;
@@ -462,7 +475,7 @@ void EXIT()
 int details_validation(string id, string password)
 {//This func after log-in check the correctness of the details
 	string line;
-	ifstream DBusersf;//name decleartion
+	ifstream DBusersf;
 	string word;
 	vector <string> words;
 	string curr_id, curr_password, curr_type;
@@ -495,6 +508,33 @@ int details_validation(string id, string password)
 	}
 	DBusersf.close();
 	return 3;
+}
+bool idAlreadyExists(string id)
+{
+	string line;
+	ifstream DBusersf;
+	string word;
+	vector <string> words;
+	DBusersf.open("C:/database/DBusers.txt"); // opening the file
+	while (DBusersf >> line)
+	{
+		istringstream iss(line);
+		if (line != "")
+		{
+			while (getline(iss, word, ','))
+			{
+				words.push_back(word);
+			}
+		}
+		if (id == words[1])
+		{
+			DBusersf.close();
+			return true;
+		}
+		words.clear();
+	}
+	DBusersf.close();
+	return false;
 }
 void AddAsset(string curr_id)
 {//This func allow the landlord to add new asset

@@ -1,0 +1,7 @@
+123896,israel,ashdod,hativat,2,700,3,yes
+963852,israel,ashdod,hamorasha,5,450,4,yes
+635241,israel,ashdod,yam,5,2000,3,yes
+857496,israel,ashkelon,shilat,2,600,2,yes
+968574,israel,ashdod,erez,5,2500,3,yes
+124578,israel,telaviv,anavi,1,600,1,yes
+123896,israel,beersheva,beni,2,550,2,yes
